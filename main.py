@@ -88,4 +88,4 @@ def upload_to_s3(screenshot_path, filename):
     return s3_url
 
 
-asyncio.run(generate_screenshot('https://twitter.com/HipHopDX/status/1755292339827003879', 'test-image2.png'))
+asyncio.run(generate_screenshot('https://twitter.com/HipHopDX/status/1755292339827003879', 'test-image3.png'))
