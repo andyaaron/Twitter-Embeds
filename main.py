@@ -118,6 +118,3 @@ def upload_to_s3(screenshot_path, filename):
     s3_url = f'https://{bucket_name}/{key}'
 
     return s3_url
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
