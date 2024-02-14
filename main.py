@@ -1,9 +1,14 @@
 import os
 import tempfile
 from tweetcapture.screenshot import TweetCapture
+from flask import Flask, request
 import boto3
 import asyncio
+
 from datetime import datetime
+
+# start up flask
+app = Flask(__name__)
 
 # Lambda code (hanging onto this in case we switch back)
 # def lambda_handler():
@@ -38,6 +43,32 @@ from datetime import datetime
 #
 #     return await asyncio.gather(task)
 
+
+# Our route to execute our async function
+@app.route('/execute_twitter_screenshot', methods=['POST'])
+def execute_twitter_screenshot():
+    data = request.get_json()
+    url = data.get('url')
+    filename = data.get('filename')
+
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+
+    try:
+        loop.run_until_complete(run_twitter_screenshot(url, filename))
+    finally:
+        loop.close()
+
+    return "Script executed successfully"
+
+
+# run async function generate_screenshot. Do we need this separate function?
+async def run_twitter_screenshot(url, filename):
+    s3_url = await generate_screenshot(url, filename)
+    print(f'Screenshot uploaded to S3: {s3_url}')
+
+
+# run TweetCapture to create screenshot, call upload_to_s3 to upload the file
 async def generate_screenshot(encoded_url, filename):
     # Create a temporary directory to store the screenshot
     screenshot_path = f'/tmp/{filename}'
@@ -52,6 +83,7 @@ async def generate_screenshot(encoded_url, filename):
     return s3_url
 
 
+# upload the newly created img to s3 bucket
 def upload_to_s3(screenshot_path, filename):
     print(f'screenshot path: {screenshot_path}')
     print(f'filename: {filename}')
@@ -86,8 +118,3 @@ def upload_to_s3(screenshot_path, filename):
     s3_url = f'https://{bucket_name}/{key}'
 
     return s3_url
-
-
-result = asyncio.run(generate_screenshot('https://twitter.com/HipHopDX/status/1755292339827003879', 'test-image-11.png'))
-
-print(result)
