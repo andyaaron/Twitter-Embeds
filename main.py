@@ -122,4 +122,4 @@ def upload_to_s3(screenshot_path, filename):
 
 if __name__ == '__main__':
     print('we out here')
-    app.run(host='0.0.0.0', port=3306)
+    app.run(host='0.0.0.0', port=5000)
