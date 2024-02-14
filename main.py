@@ -5,7 +5,7 @@ import boto3
 import asyncio
 from datetime import datetime
 
-
+# Lambda code (hanging onto this in case we switch back)
 # def lambda_handler():
 #     chrome_options = webdriver.ChromeOptions()
 #     chrome_options.add_argument('--headless')
@@ -88,4 +88,6 @@ def upload_to_s3(screenshot_path, filename):
     return s3_url
 
 
-asyncio.run(generate_screenshot('https://twitter.com/HipHopDX/status/1755292339827003879', 'test-image3.png'))
+result = asyncio.run(generate_screenshot('https://twitter.com/HipHopDX/status/1755292339827003879', 'test-image-11.png'))
+
+print(result)
