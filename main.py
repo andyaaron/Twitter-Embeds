@@ -113,5 +113,5 @@ def whitelist_and_sanitize(params, params_whitelist):
 
 if __name__ == '__main__':
     print('we out here')
-    get_twitter_screenshot('https://twitter.com/IGN/status/1724106376945787223', '2local-test.png')
+    get_twitter_screenshot('https://twitter.com/IGN/status/1724106376945787223', '1-server-test.png')
 #     app.run(host='0.0.0.0', port=5000)
