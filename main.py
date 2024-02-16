@@ -11,6 +11,11 @@ from datetime import datetime
 app = Flask(__name__)
 
 
+@app.route('/')
+def hello():
+    return 'Hello world!'
+
+
 @app.route('/get_twitter_screenshot', methods=['GET', 'POST'])
 def get_twitter_screenshot():
     params_whitelist = [
