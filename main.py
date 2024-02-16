@@ -24,7 +24,7 @@ def get_twitter_screenshot(url, filename):
         response_code = 200 # replace with actual response code
         errors = []
         payload = prepare_payload([], image_url, response_code, errors)
-        return jsonify(payload)
+        return payload
     finally:
         loop.close()
 
@@ -113,5 +113,5 @@ def whitelist_and_sanitize(params, params_whitelist):
 
 if __name__ == '__main__':
     print('we out here')
-    get_twitter_screenshot('https://twitter.com/IGN/status/1724106376945787223', '1-server-test.png')
+    get_twitter_screenshot('https://twitter.com/IGN/status/1724106376945787223', '3-server-test.png')
 #     app.run(host='0.0.0.0', port=5000)
