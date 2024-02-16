@@ -19,18 +19,19 @@ def get_twitter_screenshot():
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
 
+    # create the screenshot
     try:
-        loop.run_until_complete(run_twitter_screenshot(url, filename))
+        image = loop.run_until_complete(run_twitter_screenshot(url, filename))
+        return image # Return the url
     finally:
         loop.close()
-
-    return "Script executed successfully"
 
 
 # run async function generate_screenshot. Do we need this separate function?
 async def run_twitter_screenshot(url, filename):
     s3_url = await generate_screenshot(url, filename)
     print(f'Screenshot uploaded to S3: {s3_url}')
+    return s3_url
 
 
 # run TweetCapture to create screenshot, call upload_to_s3 to upload the file
@@ -44,8 +45,7 @@ async def generate_screenshot(encoded_url, filename):
     print(f'tweet_capture: {tweet_capture}')
 
     # Upload screenshot to S3
-    s3_url = upload_to_s3(screenshot_path, filename)
-    return s3_url
+    return upload_to_s3(screenshot_path, filename)
 
 
 # upload the newly created img to s3 bucket
