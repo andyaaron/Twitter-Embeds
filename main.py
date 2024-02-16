@@ -1,7 +1,7 @@
 import os
 import tempfile
 from tweetcapture.screenshot import TweetCapture
-from flask import Flask, request
+from flask import Flask, request, jsonify
 import boto3
 import asyncio
 
@@ -13,16 +13,32 @@ app = Flask(__name__)
 
 @app.route('/get_twitter_screenshot', methods=['GET', 'POST'])
 def get_twitter_screenshot():
-    url = request.args.get('url', default=1, type=str)
-    filename = request.args.get('filename', default=1, type=str)
-    print(f'url: {url} \n filename: {filename}')
+    params_whitelist = [
+        'url',
+        'filename',
+        # Add other accepted params as needed
+    ]
+
+    # Get params from request
+    params = {param: request.args.get(param, default=None, type=str) for param in params_whitelist}
+    print(f'Params: {params}')
+
+    # Whitelist and sanitize params
+    params = whitelist_and_sanitize(params, params_whitelist)
+
+    url = params.get('url', '')
+    filename = params.get('filename', '')
+
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
 
     # create the screenshot
     try:
-        image = loop.run_until_complete(run_twitter_screenshot(url, filename))
-        return image # Return the url
+        image_url = loop.run_until_complete(run_twitter_screenshot(url, filename))
+        response_code = 200 # replace witha ctual response code
+        errors = []
+        payload = prepare_payload(params, image_url, response_code, errors)
+        return jsonify(payload)
     finally:
         loop.close()
 
@@ -83,6 +99,30 @@ def upload_to_s3(screenshot_path, filename):
     s3_url = f'https://{bucket_name}/{key}'
 
     return s3_url
+
+
+# Function to prepare the payload
+def prepare_payload(params, result, response_code, errors):
+    payload = {
+        'params': params,
+        'timestamp': datetime.utcnow().strftime('%a %b %d %Y %H:%M:%S UTC'),
+        'success': response_code == 200,
+        'code': response_code,
+        'errors': errors,
+        'api_version': 1,
+        'data': result
+    }
+
+    return payload
+
+
+# Function to whitelist and sanitize params
+def whitelist_and_sanitize(params, params_whitelist):
+    # Whitelist params
+    whitelisted_params = {key: params[key] for key in params_whitelist if key in params}
+    # TODO: Add sanitization logic here if needed
+    return whitelisted_params
+
 
 
 if __name__ == '__main__':
