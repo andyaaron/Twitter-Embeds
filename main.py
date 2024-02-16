@@ -10,47 +10,12 @@ from datetime import datetime
 # start up flask
 app = Flask(__name__)
 
-# Lambda code (hanging onto this in case we switch back)
-# def lambda_handler():
-#     chrome_options = webdriver.ChromeOptions()
-#     chrome_options.add_argument('--headless')
-#     chrome_options.add_argument('--no-sandbox')
-#     chrome_options.add_argument('--disable-gpu')
-#     chrome_options.add_argument('--window-size=1280x1696')
-#     chrome_options.add_argument('--user-data-dir=/tmp/user-data')
-#     chrome_options.add_argument('--hide-scrollbars')
-#     chrome_options.add_argument('--enable-logging')
-#     chrome_options.add_argument('--log-level=0')
-#     chrome_options.add_argument('--v=99')
-#     chrome_options.add_argument('--single-process')
-#     chrome_options.add_argument('--data-path=/tmp/data-path')
-#     chrome_options.add_argument('--ignore-certificate-errors')
-#     chrome_options.add_argument('--homedir=/tmp')
-#     chrome_options.add_argument('--disk-cache-dir=/tmp/cache-dir')
-#     chrome_options.add_argument(
-#         'user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36')
-#     chrome_options.binary_location = os.getcwd() + "/bin/headless-chromium"
-#
-#     driver = webdriver.Chrome(chrome_options=chrome_options)
 
-
-# async def async_handler(event):
-#     encoded_url = event['encoded_url']
-#     screenshot_path = os.path.join(tempfile.gettempdir(), 'test-image.png')
-#
-#     tweet_capture = TweetCapture().screenshot(encoded_url, screenshot_path)
-#     task = asyncio.create_task(tweet_capture)
-#
-#     return await asyncio.gather(task)
-
-
-# Our route to execute our async function
-@app.route('/execute_twitter_screenshot', methods=['POST'])
-def execute_twitter_screenshot():
-    data = request.get_json()
-    url = data.get('url')
-    filename = data.get('filename')
-
+@app.route('/get_twitter_screenshot', methods=['GET', 'POST'])
+def get_twitter_screenshot():
+    url = request.args.get('url', default=1, type=str)
+    filename = request.args.get('filename', default=1, type=str)
+    print(f'url: {url} \n filename: {filename}')
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
 
