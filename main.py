@@ -1,11 +1,8 @@
-import os
-import tempfile
+from datetime import datetime
 from tweetcapture.screenshot import TweetCapture
 from flask import Flask, request, jsonify
 import boto3
 import asyncio
-
-from datetime import datetime
 
 # start up flask
 app = Flask(__name__)
@@ -40,7 +37,7 @@ def get_twitter_screenshot():
     # create the screenshot
     try:
         image_url = loop.run_until_complete(run_twitter_screenshot(url, filename))
-        response_code = 200 # replace witha ctual response code
+        response_code = 200 # replace with actual response code
         errors = []
         payload = prepare_payload(params, image_url, response_code, errors)
         return jsonify(payload)
