@@ -18,7 +18,7 @@ def get_twitter_screenshot():
     params_whitelist = [
         'url',
         'filename',
-        # Add other accepted params as needed
+        # Add other accepted params as neededˆ
     ]
 
     # Get params from request
@@ -129,4 +129,4 @@ def whitelist_and_sanitize(params, params_whitelist):
 
 if __name__ == '__main__':
     print('we out here')
-    app.run(host='127.0.0.1', port=8000, debug=True)
+    app.run(host='127.0.0.1', port=80, debug=True)
