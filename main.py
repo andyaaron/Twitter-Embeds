@@ -10,8 +10,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello():
-    return 'Hello world!'
-
+    response_data = {'success': True}
+    return jsonify(response_data)
 
 @app.route('/get_twitter_screenshot', methods=['GET', 'POST'])
 def get_twitter_screenshot():
