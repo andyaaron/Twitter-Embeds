@@ -5,16 +5,32 @@ import boto3
 import asyncio
 
 # start up flask
-# app = Flask(__name__)
-#
-#
-# @app.route('/')
-# def hello():
-#     return 'Hello world!'
+app = Flask(__name__)
 
 
-# @app.route('/get_twitter_screenshot', methods=['GET', 'POST'])
-def get_twitter_screenshot(url, filename):
+@app.route('/')
+def hello():
+    return 'Hello world!'
+
+
+@app.route('/get_twitter_screenshot', methods=['GET', 'POST'])
+def get_twitter_screenshot():
+    params_whitelist = [
+        'url',
+        'filename',
+        # Add other accepted params as needed
+    ]
+
+    # Get params from request
+    params = {param: request.args.get(param, default=None, type=str) for param in params_whitelist}
+    print(f'Params: {params}')
+
+    # Whitelist and sanitize params
+    params = whitelist_and_sanitize(params, params_whitelist)
+
+    url = params.get('url', '')
+    filename = params.get('filename', '')
+
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
 
@@ -23,8 +39,8 @@ def get_twitter_screenshot(url, filename):
         image_url = loop.run_until_complete(run_twitter_screenshot(url, filename))
         response_code = 200 # replace with actual response code
         errors = []
-        payload = prepare_payload([], image_url, response_code, errors)
-        return payload
+        payload = prepare_payload(params, image_url, response_code, errors)
+        return jsonify(payload)
     finally:
         loop.close()
 
@@ -113,5 +129,4 @@ def whitelist_and_sanitize(params, params_whitelist):
 
 if __name__ == '__main__':
     print('we out here')
-    get_twitter_screenshot('https://twitter.com/IGN/status/1724106376945787223', '3-server-test.png')
-#     app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000)
