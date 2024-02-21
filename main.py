@@ -1,8 +1,9 @@
-from datetime import datetime
-from tweetcapture.screenshot import TweetCapture
-from flask import Flask, request, jsonify
-import boto3
 import asyncio
+from datetime import datetime
+
+import boto3
+from flask import Flask, request, jsonify
+from tweetcapture.screenshot import TweetCapture
 
 # start up flask
 app = Flask(__name__)
@@ -12,6 +13,7 @@ app = Flask(__name__)
 def hello():
     response_data = {'success': True}
     return jsonify(response_data)
+
 
 @app.route('/get_twitter_screenshot', methods=['GET', 'POST'])
 def get_twitter_screenshot():
@@ -128,4 +130,4 @@ def whitelist_and_sanitize(params, params_whitelist):
 
 if __name__ == '__main__':
     print('we out here')
-    app.run(host='0.0.0.0', port=8000, debug=True)
+    app.run(host='0.0.0.0', port=8000)
