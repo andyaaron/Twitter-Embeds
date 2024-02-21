@@ -122,4 +122,4 @@ def whitelist_and_sanitize(params, params_whitelist):
 if __name__ == '__main__':
     print('we out here')
     # run flask on the local IP of our ec2 instance
-    app.run(host='172.31.26.107', port=8000)
+    app.run(host='127.0.0.1', port=8000)
