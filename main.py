@@ -9,7 +9,7 @@ from tweetcapture.screenshot import TweetCapture
 app = Flask(__name__)
 
 
-@app.route('/')
+@app.route('/', methods='GET')
 def hello():
     response_data = {'success': True}
     return jsonify(response_data)
