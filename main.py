@@ -37,20 +37,14 @@ def get_twitter_screenshot():
 
     # create the screenshot
     try:
-        image_url = loop.run_until_complete(run_twitter_screenshot(url, filename))
+        image_url = loop.run_until_complete(generate_screenshot(url, filename))
+        print(f'Screenshot uploaded to S3: {image_url}')
         response_code = 200 # replace with actual response code
         errors = []
         payload = prepare_payload(params, image_url, response_code, errors)
         return jsonify(payload)
     finally:
         loop.close()
-
-
-# run async function generate_screenshot. Do we need this separate function?
-async def run_twitter_screenshot(url, filename):
-    s3_url = await generate_screenshot(url, filename)
-    print(f'Screenshot uploaded to S3: {s3_url}')
-    return s3_url
 
 
 # run TweetCapture to create screenshot, call upload_to_s3 to upload the file
@@ -60,8 +54,6 @@ async def generate_screenshot(encoded_url, filename):
 
     # Use the encoded_url in your script logic
     tweet_capture = await TweetCapture().screenshot(encoded_url, screenshot_path)
-
-    print(f'tweet_capture: {tweet_capture}')
 
     # Upload screenshot to S3
     return upload_to_s3(screenshot_path, filename)
@@ -125,7 +117,6 @@ def whitelist_and_sanitize(params, params_whitelist):
     whitelisted_params = {key: params[key] for key in params_whitelist if key in params}
     # TODO: Add sanitization logic here if needed
     return whitelisted_params
-
 
 
 if __name__ == '__main__':
