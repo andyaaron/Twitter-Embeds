@@ -30,7 +30,11 @@ def get_twitter_embed():
 
     url = params.get('url', '')
     filename = params.get('filename', '')
-    print(f'filename: {filename}')
+
+    # debug log
+    app.logger.info('getting screenshot at url %s', url)
+    app.logger.info('filename: %s', filename)
+
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
 
