@@ -24,7 +24,6 @@ def get_twitter_embed():
 
     # Get params from request
     params = {param: request.args.get(param, default=None, type=str) for param in params_whitelist}
-    print(f'Params: {params}')
 
     # Whitelist and sanitize params
     params = whitelist_and_sanitize(params, params_whitelist)
@@ -89,21 +88,6 @@ def upload_to_s3(screenshot_path, filename):
     s3_url = f'https://{bucket_name}/{key}'
 
     return s3_url
-
-
-# Function to prepare the payload
-def prepare_payload(params, result, response_code, errors):
-    payload = {
-        'params': params,
-        'timestamp': datetime.utcnow().strftime('%a %b %d %Y %H:%M:%S UTC'),
-        'success': response_code == 200,
-        'code': response_code,
-        'errors': errors,
-        'api_version': 1,
-        'data': result
-    }
-
-    return payload
 
 
 # Function to whitelist and sanitize params
