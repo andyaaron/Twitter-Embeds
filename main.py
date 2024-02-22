@@ -35,36 +35,31 @@ def get_twitter_embed():
     app.logger.info('getting screenshot at url %s', url)
     app.logger.info('filename: %s', filename)
 
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-
-    # create the screenshot
-    try:
-        image_url = loop.run_until_complete(generate_screenshot(url, filename))
-        return image_url
-    finally:
-        loop.close()
-
-
-# run TweetCapture to create screenshot, call upload_to_s3 to upload the file
-async def generate_screenshot(encoded_url, filename):
     # append .png to filename
     filename = f'{filename}.png'
-
     # Create a temporary directory to store the screenshot
     screenshot_path = f'/tmp/{filename}'
 
-    # Use the encoded_url in your script logic
-    tweet_capture = await TweetCapture().screenshot(encoded_url, screenshot_path)
+    # create image file
+    try:
+        tweet_screenshot_path = await TweetCapture().screenshot(url, screenshot_path)
+    except FileExistsError:
+        print(f"{screenshot_path} already exists!")
+        return jsonify(success=False)
 
-    # Upload screenshot to S3
-    return upload_to_s3(screenshot_path, filename)
+    app.logger.info('tweet capture: %s', tweet_screenshot_path)
+
+    # upload image and get url
+
+    image_url = await upload_to_s3(tweet_screenshot_path, filename)
+
+    app.logger.info('image url: %s', image_url)
+
+    return jsonify(image_url=image_url)
 
 
 # upload the newly created img to s3 bucket
-def upload_to_s3(screenshot_path, filename):
-    print(f'screenshot path: {screenshot_path}')
-    print(f'filename: {filename}')
+async def upload_to_s3(screenshot_path, filename):
     # Set up AWS S3 client (you should configure your credentials before using this)
     s3 = boto3.client('s3')
 
