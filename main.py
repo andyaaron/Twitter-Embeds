@@ -16,7 +16,7 @@ def hello():
 
 
 @app.route('/get_twitter_embed', methods=['GET', 'POST'])
-def get_twitter_embed():
+async def get_twitter_embed():
     params_whitelist = [
         'url',
         'filename'
