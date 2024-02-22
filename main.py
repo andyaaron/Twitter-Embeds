@@ -43,6 +43,9 @@ def get_twitter_embed():
 
 # run TweetCapture to create screenshot, call upload_to_s3 to upload the file
 async def generate_screenshot(encoded_url, filename):
+    # append .png to filename
+    filename = f'{filename}.png'
+
     # Create a temporary directory to store the screenshot
     screenshot_path = f'/tmp/{filename}'
 
@@ -99,6 +102,5 @@ def whitelist_and_sanitize(params, params_whitelist):
 
 
 if __name__ == '__main__':
-    print('we out here')
     # run flask on the local IP of our ec2 instance
     app.run(host='127.0.0.1', port=8000)
