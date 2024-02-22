@@ -37,12 +37,7 @@ def get_twitter_embed():
 
     # create the screenshot
     try:
-        image_url = loop.run_until_complete(generate_screenshot(url, filename))
-        print(f'Screenshot uploaded to S3: {image_url}')
-        response_code = 200 # replace with actual response code
-        errors = []
-        payload = prepare_payload(params, image_url, response_code, errors)
-        return jsonify(payload)
+        return loop.run_until_complete(generate_screenshot(url, filename))
     finally:
         loop.close()
 
