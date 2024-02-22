@@ -54,8 +54,8 @@ async def get_twitter_embed():
     image_url = await upload_to_s3(tweet_screenshot_path, filename)
 
     app.logger.info('image url: %s', image_url)
-
-    return jsonify({'image_url': image_url})
+    response = {'image_url': image_url}
+    return jsonify(response)
 
 
 # upload the newly created img to s3 bucket
