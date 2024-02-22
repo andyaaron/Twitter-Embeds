@@ -15,8 +15,8 @@ def hello():
     return jsonify(response_data)
 
 
-@app.route('/get_twitter_screenshot', methods=['GET', 'POST'])
-def get_twitter_screenshot():
+@app.route('/get_twitter_embed', methods=['GET', 'POST'])
+def get_twitter_embed():
     params_whitelist = [
         'url',
         'filename'
