@@ -36,7 +36,8 @@ def get_twitter_embed():
 
     # create the screenshot
     try:
-        return loop.run_until_complete(generate_screenshot(url, filename))
+        image_url = loop.run_until_complete(generate_screenshot(url, filename))
+        return image_url
     finally:
         loop.close()
 
@@ -102,6 +103,6 @@ def whitelist_and_sanitize(params, params_whitelist):
 
 
 if __name__ == '__main__':
-    # run flask on the local IP of our ec2 instance
     app.debug = True
+    # run flask on the local IP of our ec2 instance
     app.run(host='127.0.0.1', port=8000)
