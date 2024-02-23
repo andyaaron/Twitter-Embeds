@@ -29,11 +29,10 @@ async def get_twitter_embed():
 
     # Whitelist and sanitize params
     params = whitelist_and_sanitize(params, params_whitelist)
-    url = params.get('url', '')
-    filename = params.get('filename', '')
+    url, filename = params.get('url', ''), params.get('filename', '')
     # append .png to filename and create temp filepath
-    filename = f'{filename}.png'
-    screenshot_path = f'/tmp/{filename}'
+    filename_with_extension = f'{filename}.png'
+    screenshot_path = f'/tmp/{filename_with_extension}'
 
     # debug log
     # app.logger.info('getting screenshot at url %s', url)
@@ -49,7 +48,7 @@ async def get_twitter_embed():
     # app.logger.info('tweet capture: %s', tweet_screenshot_path)
 
     # upload image and get url
-    image_url = await upload_to_s3(tweet_screenshot_path, filename)
+    image_url = await upload_to_s3(tweet_screenshot_path, filename_with_extension)
 
     # app.logger.info('image url: %s', image_url)
 
