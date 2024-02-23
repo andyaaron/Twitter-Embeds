@@ -1,6 +1,5 @@
-import asyncio
 from datetime import datetime
-
+import os
 import boto3
 from flask import Flask, request, jsonify
 from tweetcapture.screenshot import TweetCapture
@@ -51,6 +50,9 @@ async def get_twitter_embed():
     image_url = await upload_to_s3(tweet_screenshot_path, filename_with_extension)
 
     # app.logger.info('image url: %s', image_url)
+
+    # remove the file created in /tmp/
+    os.remove(tweet_screenshot_path)
 
     return image_url
 
