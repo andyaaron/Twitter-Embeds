@@ -15,6 +15,8 @@ def hello():
     return jsonify(response_data)
 
 
+# Get params from request, create image file in /tmp/,
+# upload to s3, return s3 url
 @app.route('/get_twitter_embed', methods=['GET', 'POST'])
 async def get_twitter_embed():
     params_whitelist = [
@@ -27,18 +29,15 @@ async def get_twitter_embed():
 
     # Whitelist and sanitize params
     params = whitelist_and_sanitize(params, params_whitelist)
-
     url = params.get('url', '')
     filename = params.get('filename', '')
+    # append .png to filename and create temp filepath
+    filename = f'{filename}.png'
+    screenshot_path = f'/tmp/{filename}'
 
     # debug log
-    app.logger.info('getting screenshot at url %s', url)
-    app.logger.info('filename: %s', filename)
-
-    # append .png to filename
-    filename = f'{filename}.png'
-    # Create a temporary directory to store the screenshot
-    screenshot_path = f'/tmp/{filename}'
+    # app.logger.info('getting screenshot at url %s', url)
+    # app.logger.info('filename: %s', filename)
 
     # create image file
     try:
@@ -47,14 +46,13 @@ async def get_twitter_embed():
         print(f"{screenshot_path} already exists!")
         return jsonify(success=False)
 
-    app.logger.info('tweet capture: %s', tweet_screenshot_path)
+    # app.logger.info('tweet capture: %s', tweet_screenshot_path)
 
     # upload image and get url
-
     image_url = await upload_to_s3(tweet_screenshot_path, filename)
 
-    app.logger.info('image url: %s', image_url)
-    response = {'image_url': image_url}
+    # app.logger.info('image url: %s', image_url)
+
     return image_url
 
 
@@ -101,6 +99,7 @@ def whitelist_and_sanitize(params, params_whitelist):
     return whitelisted_params
 
 
+# run our app with specified host & port
 if __name__ == '__main__':
     app.debug = True
     # run flask on the local IP of our ec2 instance
