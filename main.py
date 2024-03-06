@@ -40,7 +40,7 @@ async def get_twitter_embed():
     # create image file
     try:
         tweet = TweetCapture()
-        tweet.add_chrome_argument("--enable-javascript")  # needed to capture video thumbnails
+        tweet.add_chrome_argument("javascript.enabled", True)  # needed to capture video thumbnails
         tweet_screenshot_path = await tweet.screenshot(url, screenshot_path)
     except FileExistsError:
         print(f"{screenshot_path} already exists!")
