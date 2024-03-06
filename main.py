@@ -29,29 +29,30 @@ async def get_twitter_embed():
     # Whitelist and sanitize params
     params = whitelist_and_sanitize(params, params_whitelist)
     url, filename = params.get('url', ''), params.get('filename', '')
+
     # append .png to filename and create temp filepath
     filename_with_extension = f'{filename}.png'
     screenshot_path = f'/tmp/{filename_with_extension}'
 
     # debug log
-    # app.logger.info('getting screenshot at url %s', url)
-    # app.logger.info('filename: %s', filename)
+    app.logger.info('getting screenshot at url %s', url)
+    app.logger.info('filename: %s', filename)
 
     # create image file
     try:
         tweet = TweetCapture()
-        tweet.add_chrome_argument("javascript.enabled")  # needed to capture video thumbnails
+        tweet.add_chrome_argument("--enable-javascript")  # needed to capture video thumbnails
         tweet_screenshot_path = await tweet.screenshot(url, screenshot_path)
     except FileExistsError:
         print(f"{screenshot_path} already exists!")
         return jsonify(success=False)
 
-    # app.logger.info('tweet capture: %s', tweet_screenshot_path)
+    app.logger.info('tweet capture: %s', tweet_screenshot_path)
 
     # upload image and get url
     image_url = await upload_to_s3(tweet_screenshot_path, filename_with_extension)
 
-    # app.logger.info('image url: %s', image_url)
+    app.logger.info('image url: %s', image_url)
 
     # remove the file created in /tmp/
     os.remove(tweet_screenshot_path)
