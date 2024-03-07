@@ -4,7 +4,7 @@ import traceback
 import boto3
 from flask import Flask, request, jsonify
 from tweetcapture.screenshot import TweetCapture
-
+from fake_useragent import UserAgent
 # start up flask
 app = Flask(__name__)
 
@@ -41,9 +41,12 @@ async def get_twitter_embed():
 
     # create image file
     try:
+        ua = UserAgent()
+
         tweet = TweetCapture()
         tweet.add_chrome_argument("--enable-javascript")  # needed to capture video thumbnails
         tweet.add_chrome_argument("--disable-extensions")  # needed to capture video thumbnails
+        tweet.add_chrome_argument(f"--user-agent={ua.random}")  # needed to capture video thumbnails
         tweet_screenshot_path = await tweet.screenshot(url, screenshot_path)
     except Exception as error:
         traceback.print_exc(error)
