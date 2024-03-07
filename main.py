@@ -1,5 +1,6 @@
 from datetime import datetime
 import os
+import traceback
 import boto3
 from flask import Flask, request, jsonify
 from tweetcapture.screenshot import TweetCapture
@@ -42,10 +43,11 @@ async def get_twitter_embed():
     try:
         tweet = TweetCapture()
         tweet.add_chrome_argument("--enable-javascript")  # needed to capture video thumbnails
+        tweet.add_chrome_argument("--disable-extensions")  # needed to capture video thumbnails
         tweet_screenshot_path = await tweet.screenshot(url, screenshot_path)
-    except FileExistsError:
-        print(f"{screenshot_path} already exists!")
-        return jsonify(success=False)
+    except Exception as error:
+        traceback.print_exc(error)
+        return
 
     app.logger.info('tweet capture: %s', tweet_screenshot_path)
 
