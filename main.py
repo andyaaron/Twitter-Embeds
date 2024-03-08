@@ -1,10 +1,9 @@
 from datetime import datetime
 import os
-import traceback
 import boto3
 from flask import Flask, request, jsonify
 from tweetcapture.screenshot import TweetCapture
-from fake_useragent import UserAgent
+
 # start up flask
 app = Flask(__name__)
 
