@@ -48,8 +48,7 @@ async def get_twitter_embed():
         tweet.add_chrome_argument("--disable-gpu")
         tweet_screenshot_path = await tweet.screenshot(url, screenshot_path)
     except Exception as error:
-        traceback.print_exc(error)
-        return
+        return error
 
     app.logger.info('tweet capture: %s', tweet_screenshot_path)
 
