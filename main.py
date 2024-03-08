@@ -41,9 +41,8 @@ async def get_twitter_embed():
     # create image file
     try:
         tweet = TweetCapture()
-        tweet.add_chrome_argument("--enable-javascript")  # needed to capture video thumbnails
-        tweet.add_chrome_argument("--disable-web-security")  # needed to capture video thumbnails
         tweet.add_chrome_argument("user-data-dir=selenium")  # needed to capture video thumbnails
+        tweet.add_chrome_argument("--disable-features=PreloadMediaEngagementData, MediaEngagementBypassAutoplayPolicies")  # needed to capture video thumbnails
         tweet_screenshot_path = await tweet.screenshot(url, screenshot_path)
     except Exception as error:
         return error
