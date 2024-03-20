@@ -41,7 +41,7 @@ async def get_twitter_embed():
     # create image file
     try:
         tweet = TweetCapture()
-        tweet.set_wait_time(35)
+        tweet.set_wait_time(15)
         tweet.set_gui(True)
         tweet.add_chrome_argument("user-data-dir=selenium")  # needed to capture video thumbnails
         # tweet.add_chrome_argument("--use-fake-ui-for-media-stream=1");
