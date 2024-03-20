@@ -41,6 +41,7 @@ async def get_twitter_embed():
     # create image file
     try:
         tweet = TweetCapture()
+        tweet.add_chrome_argument("--proxy-server=11.456.448.110:8000")
         tweet.add_chrome_argument("user-data-dir=selenium")  # needed to capture video thumbnails
         tweet_screenshot_path = await tweet.screenshot(url, screenshot_path)
     except Exception as error:
