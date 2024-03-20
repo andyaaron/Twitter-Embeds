@@ -42,7 +42,6 @@ async def get_twitter_embed():
     try:
         tweet = TweetCapture()
         tweet.set_cookies([{'name': 'auth_token', 'value': '8716d95ac312efc68257b6f740f0e99ca41e70df'}])
-        tweet.add_chrome_argument("user-data-dir=selenium")  # needed to capture video thumbnails
         tweet_screenshot_path = await tweet.screenshot(url, screenshot_path)
     except Exception as error:
         return error
