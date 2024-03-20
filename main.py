@@ -40,11 +40,16 @@ async def get_twitter_embed():
 
     # create image file
     try:
+        os.environ['AUTH_TOKEN'] = '8716d95ac312efc68257b6f740f0e99ca41e70df'
         tweet = TweetCapture()
-        app.logger.info(f'cookies: {tweet.cookies}')
-        tweet.set_cookies([{'name': 'auth_token', 'value': '8716d95ac312efc68257b6f740f0e99ca41e70df'}])
-        app.logger.info(f'cookies: {tweet.cookies}')
+        tweet.hide_videos = False
+        # app.logger.info(f'cookies: {tweet.cookies}')
+        # tweet.set_cookies([{'name': 'auth_token', 'value': '8716d95ac312efc68257b6f740f0e99ca41e70df'}])
+        # app.logger.info(f'cookies: {tweet.cookies}')
+        # tweet.add_chrome_argument('--profile-directory=Profile 1')
+        # tweet.add_chrome_argument('--user-data-dir=/Users/aaron.andy/Library/Application Support/Google/Chrome/')
         tweet_screenshot_path = await tweet.screenshot(url, screenshot_path)
+        print(f'cookies: {tweet.cookies}')
     except Exception as error:
         return error
 
