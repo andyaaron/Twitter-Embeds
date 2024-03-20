@@ -41,7 +41,9 @@ async def get_twitter_embed():
     # create image file
     try:
         tweet = TweetCapture()
+        app.logger.info(f'cookies: {tweet.cookies}')
         tweet.set_cookies([{'name': 'auth_token', 'value': '8716d95ac312efc68257b6f740f0e99ca41e70df'}])
+        app.logger.info(f'cookies: {tweet.cookies}')
         tweet_screenshot_path = await tweet.screenshot(url, screenshot_path)
     except Exception as error:
         return error
@@ -104,5 +106,6 @@ def whitelist_and_sanitize(params, params_whitelist):
 
 # run our app with specified host & port
 if __name__ == '__main__':
+    app.debug = True
     # run flask on the local IP of our ec2 instance
     app.run(host='127.0.0.1', port=8000)
