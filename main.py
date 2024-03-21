@@ -41,7 +41,6 @@ async def get_twitter_embed():
     # create image file
     try:
         tweet = TweetCapture()
-        tweet.set_chromedriver_path('/usr/local/bin/chromedriver')
         tweet_screenshot_path = await tweet.screenshot(url, screenshot_path)
         print(f'cookies: {tweet.cookies}')
     except Exception as error:
