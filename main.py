@@ -1,9 +1,9 @@
 from datetime import datetime
 import os
+import requests
 import boto3
 from flask import Flask, request, jsonify
 from tweetcapture.screenshot import TweetCapture
-
 # start up flask
 app = Flask(__name__)
 
@@ -42,7 +42,6 @@ async def get_twitter_embed():
     try:
         tweet = TweetCapture()
         tweet_screenshot_path = await tweet.screenshot(url, screenshot_path)
-        print(f'cookies: {tweet.cookies}')
     except Exception as error:
         return error
 
