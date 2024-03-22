@@ -14,6 +14,16 @@ def hello():
     return jsonify(response_data)
 
 
+@app.route('/tweetpik', methods=['get'])
+def tweetpik():
+    response = requests.get(
+        "https://tweetpik.com/api/v2/images",
+        data={"url": "https://twitter.com/AMAZlNGNATURE/status/1770966140811890717"},
+        headers={'Authorization': 'bd7d6c02-b0a3-40d2-b5a1-87e129e8e68a'},
+    )
+    print(response)
+
+
 # Get params from request, create image file in /tmp/,
 # upload to s3, return s3 url
 @app.route('/get_twitter_embed', methods=['GET', 'POST'])
@@ -41,6 +51,9 @@ async def get_twitter_embed():
     # create image file
     try:
         tweet = TweetCapture()
+        tweet.add_chrome_argument('--no-sandbox')
+        tweet.add_chrome_argument('--disable-gpu')
+        # tweet.set_chromedriver_path('/opt/google/chrome/google-chrome')
         tweet_screenshot_path = await tweet.screenshot(url, screenshot_path)
     except Exception as error:
         return error
