@@ -51,6 +51,7 @@ async def get_twitter_embed():
     # create image file
     try:
         tweet = TweetCapture()
+        tweet.set_chromedriver_path('/snap/bin/chromium.chromedriver')
         tweet_screenshot_path = await tweet.screenshot(url, screenshot_path)
     except Exception as error:
         return error
