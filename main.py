@@ -51,9 +51,6 @@ async def get_twitter_embed():
     # create image file
     try:
         tweet = TweetCapture()
-        tweet.add_chrome_argument('--no-sandbox')
-        tweet.add_chrome_argument('--disable-gpu')
-        tweet.set_chromedriver_path('/usr/bin/google-chrome')
         tweet_screenshot_path = await tweet.screenshot(url, screenshot_path)
     except Exception as error:
         return error
