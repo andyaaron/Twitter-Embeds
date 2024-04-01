@@ -1,27 +1,22 @@
+import logging
 from datetime import datetime
 import os
 import requests
+from time import sleep
 import boto3
 from flask import Flask, request, jsonify
 from tweetcapture.screenshot import TweetCapture
+import selenium
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+
+
 # start up flask
 app = Flask(__name__)
 
-
-@app.route('/', methods=['GET'])
-def hello():
-    response_data = {'success': True}
-    return jsonify(response_data)
-
-
-@app.route('/tweetpik', methods=['get'])
-def tweetpik():
-    response = requests.get(
-        "https://tweetpik.com/api/v2/images",
-        data={"url": "https://twitter.com/AMAZlNGNATURE/status/1770966140811890717"},
-        headers={'Authorization': 'bd7d6c02-b0a3-40d2-b5a1-87e129e8e68a'},
-    )
-    print(response)
+# use gunicorn logger
+gunicorn_logger = logging.getLogger('gunicorn.error')
+app.logger.handlers = gunicorn_logger.handlers
 
 
 # Get params from request, create image file in /tmp/,
