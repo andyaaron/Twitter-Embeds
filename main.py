@@ -20,7 +20,7 @@ def default_route():
 
     app.logger.debug("I'm a DEBUG message")
 
-    app.logger.info("I'm an INFO message")
+    app.logger.debug("I'm an INFO message")
 
     app.logger.warning("I'm a WARNING message")
 
@@ -52,8 +52,8 @@ async def get_twitter_embed():
     screenshot_path = f'/tmp/{filename_with_extension}'
 
     # debug log
-    app.logger.info('getting screenshot at url %s', url)
-    app.logger.info('filename: %s', filename)
+    app.logger.debug('getting screenshot at url %s', url)
+    app.logger.debug('filename: %s', filename)
 
     # create image file
     try:
@@ -63,12 +63,12 @@ async def get_twitter_embed():
     except Exception as error:
         return error
 
-    app.logger.info('tweet capture: %s', tweet_screenshot_path)
+    app.logger.debug('tweet capture: %s', tweet_screenshot_path)
 
     # upload image and get url
     image_url = await upload_to_s3(tweet_screenshot_path, filename_with_extension)
 
-    app.logger.info('image url: %s', image_url)
+    app.logger.debug('image url: %s', image_url)
 
     # remove the file created in /tmp/
     os.remove(tweet_screenshot_path)
