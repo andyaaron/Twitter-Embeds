@@ -2,7 +2,7 @@ import logging
 from datetime import datetime
 import os
 import boto3
-from flask import Flask, request, jsonify
+from flask import Flask, request
 from tweetcapture.screenshot import TweetCapture
 
 
@@ -12,23 +12,6 @@ app = Flask(__name__)
 # use gunicorn logger
 gunicorn_logger = logging.getLogger('gunicorn.error')
 app.logger.handlers = gunicorn_logger.handlers
-
-
-@app.route('/')
-def default_route():
-    """Default route"""
-
-    app.logger.debug("I'm a DEBUG message")
-
-    app.logger.debug("I'm an INFO message")
-
-    app.logger.warning("I'm a WARNING message")
-
-    app.logger.error("I'm a ERROR message")
-
-    app.logger.critical("I'm a CRITICAL message")
-
-    return jsonify('a return message')
 
 
 # Get params from request, create image file in /tmp/,
@@ -52,8 +35,8 @@ async def get_twitter_embed():
     screenshot_path = f'/tmp/{filename_with_extension}'
 
     # debug log
-    app.logger.debug('getting screenshot at url %s', url)
-    app.logger.debug('filename: %s', filename)
+    app.logger.info('getting screenshot at url %s', url)
+    app.logger.info('filename: %s', filename)
 
     # create image file
     try:
@@ -63,12 +46,12 @@ async def get_twitter_embed():
     except Exception as error:
         return error
 
-    app.logger.debug('tweet capture: %s', tweet_screenshot_path)
+    app.logger.info('tweet capture: %s', tweet_screenshot_path)
 
     # upload image and get url
     image_url = await upload_to_s3(tweet_screenshot_path, filename_with_extension)
 
-    app.logger.debug('image url: %s', image_url)
+    app.logger.info('image url: %s', image_url)
 
     # remove the file created in /tmp/
     os.remove(tweet_screenshot_path)
@@ -122,4 +105,4 @@ def whitelist_and_sanitize(params, params_whitelist):
 # run our app with specified host & port
 if __name__ == '__main__':
     # run flask on the local IP of our ec2 instance
-    app.run(host='127.0.0.1', port=8000, debug=True)
+    app.run(host='127.0.0.1', port=8000)
