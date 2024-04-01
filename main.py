@@ -1,14 +1,9 @@
 import logging
 from datetime import datetime
 import os
-import requests
-from time import sleep
 import boto3
-from flask import Flask, request, jsonify
+from flask import Flask, request
 from tweetcapture.screenshot import TweetCapture
-import selenium
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 
 
 # start up flask
