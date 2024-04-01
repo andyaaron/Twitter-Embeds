@@ -2,7 +2,7 @@ import logging
 from datetime import datetime
 import os
 import boto3
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from tweetcapture.screenshot import TweetCapture
 
 
@@ -12,6 +12,23 @@ app = Flask(__name__)
 # use gunicorn logger
 gunicorn_logger = logging.getLogger('gunicorn.error')
 app.logger.handlers = gunicorn_logger.handlers
+
+
+@app.route('/')
+def default_route():
+    """Default route"""
+
+    app.logger.debug("I'm a DEBUG message")
+
+    app.logger.info("I'm an INFO message")
+
+    app.logger.warning("I'm a WARNING message")
+
+    app.logger.error("I'm a ERROR message")
+
+    app.logger.critical("I'm a CRITICAL message")
+
+    return jsonify('a return message')
 
 
 # Get params from request, create image file in /tmp/,
