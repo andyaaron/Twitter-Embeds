@@ -10,8 +10,8 @@ from tweetcapture.screenshot import TweetCapture
 app = Flask(__name__)
 
 # use gunicorn logger
-gunicorn_logger = logging.getLogger('gunicorn.error')
-app.logger.handlers = gunicorn_logger.handlers
+# gunicorn_logger = logging.getLogger('gunicorn.error')
+# app.logger.handlers = gunicorn_logger.handlers
 
 
 # Get params from request, create image file in /tmp/,
@@ -65,12 +65,13 @@ async def upload_to_s3(screenshot_path, filename):
     s3 = boto3.client('s3')
 
     # Specify the S3 bucket and key (path) where the image should be uploaded
-    bucket_name = 'static.hiphopdx.com'
+    bucket_name = '' #insert bucket name here
 
     # Get current year and month
     current_year_month = datetime.now().strftime('%Y/%m')
 
     # Our path to insert the screenshot
+    # update upload path here
     key = f'assets/prod/img/tweets/{current_year_month}/{filename}'
 
     # Create our year/month subdirectory if it doesn't exist
@@ -104,5 +105,6 @@ def whitelist_and_sanitize(params, params_whitelist):
 
 # run our app with specified host & port
 if __name__ == '__main__':
+    app.debug = True
     # run flask on the local IP of our ec2 instance
     app.run(host='127.0.0.1', port=8000)
